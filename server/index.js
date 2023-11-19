@@ -14,6 +14,7 @@ const corsOptions = {
   credentials: true,
   optionSuccessStatus: 200,
 }
+
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(cookieParser())
@@ -43,6 +44,9 @@ const client = new MongoClient(process.env.DB_URI, {
 })
 async function run() {
   try {
+
+    const usersCollection = client.db('StayVista').collection('users');
+
     // auth related api
     app.post('/jwt', async (req, res) => {
       const user = req.body
