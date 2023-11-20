@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import Heading from "../Shared/Heading";
 import Loader from "../Shared/Loader";
 import { Helmet } from "react-helmet-async";
+import { getAllRooms } from "../../api/rooms";
 
 const Rooms = () => {
     const [rooms, setRooms] = useState([]);
@@ -14,8 +15,7 @@ const Rooms = () => {
 
     useEffect(() => {
         setLoading(true)
-        fetch("./rooms.json")
-            .then(res => res.json())
+        getAllRooms()
             .then(data => {
                 if (currCategory) {
                     const filter = data.filter(room => room?.category === currCategory);
