@@ -19,6 +19,7 @@ app.use(cors(corsOptions))
 app.use(express.json())
 app.use(cookieParser())
 app.use(morgan('dev'))
+
 const verifyToken = async (req, res, next) => {
   const token = req.cookies?.token
   console.log(token)
@@ -47,15 +48,33 @@ async function run() {
 
     const usersCollection = client.db('StayVista').collection('users');
     const roomCollection = client.db("StayVista").collection('rooms');
-    
-    app.get('/rooms', async(req, res) => {
+
+    app.get('/rooms', async (req, res) => {
       const result = await roomCollection.find().toArray();
       res.send(result);
     })
 
-    app.get('/rooms/:id', async(req, res) => {
+    app.get('/rooms/:id', async (req, res) => {
       const id = req.params.id;
-      const result = await roomCollection.findOne({_id: new ObjectId(id)});
+      const result = await roomCollection.findOne({ _id: new ObjectId(id) });
+      res.send(result);
+    })
+
+    app.get('/host-rooms/:email', async (req, res) => {
+      const email = req.params.email;
+      const result = await roomCollection.find({ 'host.email': email }).toArray();
+      res.send(result);
+    })
+
+    app.post('/rooms', verifyToken, async (req, res) => {
+      const room = req.body;
+      const result = roomCollection.insertOne(room);
+      res.send(result);
+    })
+
+    app.get('/users/:email', async(req, res) => {
+      const email = req.params.email;
+      const result = await usersCollection.findOne({email: email})
       res.send(result);
     })
 
