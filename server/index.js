@@ -5,6 +5,7 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb')
 const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer');
 const morgan = require('morgan')
 const port = process.env.PORT || 8000
 
@@ -37,6 +38,35 @@ const verifyToken = async (req, res, next) => {
     next()
   })
 }
+
+console.log(process.env.USER, 'user');
+
+/*----------Send Mail using Node mailer-----------*/
+const sendEmail = () => {
+  // create a transporter
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.USER,
+      pass: process.env.PASSWORD
+    }
+  })
+
+  // verify connection
+  transporter.verify((error, success) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('server is ready to take our email', success);
+    }
+
+  })
+}
+
+sendEmail();
 
 const client = new MongoClient(process.env.DB_URI, {
   serverApi: {
@@ -186,7 +216,8 @@ async function run() {
             query,
             {
               $set: {
-                user
+                email: email,
+                status: user?.status
               }
             },
             options
