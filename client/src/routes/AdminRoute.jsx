@@ -6,7 +6,7 @@ const AdminRoute = ({children}) => {
     const [role, isLoading] = useRole();
 
     if (isLoading) return <Loader></Loader>
-    if (role == 'role') return children; 
+    if (role == 'admin') return children; 
 
     return <Navigate to="/dashboard" replace="true" />
 };

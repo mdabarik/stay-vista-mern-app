@@ -6,7 +6,7 @@ export const saveUser = async (user) => {
         role: 'guest',
         status: 'Verified'
     }
-    const {data} = await axiosSecure.put(`/users/${user?.email}`, currUser);
+    const { data } = await axiosSecure.put(`/users/${user?.email}`, currUser);
     return data;
 }
 
@@ -25,4 +25,28 @@ export const clearCookie = async () => {
 export const getUserRole = async (email) => {
     const { data } = await axiosSecure.get(`/users/${email}`);
     return data?.role;
+}
+
+export const getAllUsers = async () => {
+    const { data } = await axiosSecure('/users');
+    return data;
+}
+
+
+export const updateRole = async ({ email, role }) => {
+    const currUser = {
+        email, role,
+        status: 'Verified'
+    }
+    const { data } = await axiosSecure.put(`/users/update/${email}`, currUser);
+    return data;
+}
+
+export const becomeHost = async (email) => {
+    const currUser = {
+        email,
+        status: 'Requested'
+    }
+    const { data } = await axiosSecure.put(`/users/${email}`, currUser);
+    return data;
 }

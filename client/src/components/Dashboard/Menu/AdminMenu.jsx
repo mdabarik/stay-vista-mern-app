@@ -1,5 +1,5 @@
-import MenuItem from "./MenuItem";
 import { FaUserCog } from 'react-icons/fa';
+import MenuItem from '../Sidebar/MenuItem';
 
 const AdminMenu = () => {
     return (
@@ -7,7 +7,7 @@ const AdminMenu = () => {
             <MenuItem
                 icon={FaUserCog}
                 label='Manage Users'
-                address='/manage-users'
+                address='/dashboard/manage-users'
               />
         </>
     );
